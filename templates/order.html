@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+        <br>       
+        <div class="card">
+            <div class="card-body">
+                <h1>{% block title %} Make new order {% endblock %}</h1>
+                <form method="post">
+                    <label for="user_mail" class="form-label">User email</label>
+                    <br>
+                    <input class="form-control" type="text" name="user_mail"
+                        placeholder="user email"
+                        value="{{ request.form['user_mail'] }}" />
+                    <br>
+                    <label for="product" class="form-label">Product</label>
+                    <br>
+                    <input class="form-control" type="text" name="product"
+                        placeholder="Product"
+                        value="{{ request.form['product'] }}" />
+                    <br>
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <br>
+                    <input class="form-control" type="text" name="quantity"
+                        placeholder="Quantity"
+                        value="{{ request.form['quantity'] }}" />
+                    <br>       
+                    <br>
+                    <button type="submit" class="btn btn-primary">Make new order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+</div>
+
+    
+{% endblock %}      
