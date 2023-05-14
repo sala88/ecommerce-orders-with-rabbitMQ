@@ -27,27 +27,22 @@ def order():
                                                                    credentials=pika.PlainCredentials(cf.RMQ_USER, cf.RMQ_PASSWORD)))
     channel = connection.channel()
 
-    channel.exchange_declare(
-        exchange=cf.EXCHANGE_NAME, 
-        exchange_type=cf.EXCHANGE_TYPE
-    )
-
     channel.basic_publish(
         exchange=cf.EXCHANGE_NAME,
-        routing_key='order.notify',
+        routing_key=cf.BINDING_KEY_NOTIFY,
         body=json.dumps({'user_email': order['user_email']})
     )
     print(' [x] Sent notify message')
     
     channel.basic_publish(
         exchange=cf.EXCHANGE_NAME,
-        routing_key='order.report',
+        routing_key=cf.BINDING_KEY_REPORT,
         body=json.dumps(order)
     )
     print(' [x] Sent report message')
 
     connection.close()
-    return " [x] Sent: %" 
+    return " [x] Sent: %", order
 
 
 if __name__ == '__main__':

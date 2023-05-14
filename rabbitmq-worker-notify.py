@@ -9,10 +9,15 @@ channel = connection.channel()
 
 channel.queue_declare(cf.ORDERS_QUEUE_NOTIFY)
 
+channel.exchange_declare(
+    exchange=cf.EXCHANGE_NAME, 
+    exchange_type=cf.EXCHANGE_TYPE
+)
+
 channel.queue_bind(
     exchange=cf.EXCHANGE_NAME,
     queue=cf.ORDERS_QUEUE_NOTIFY,
-    routing_key='order.notify'  # binding key
+    routing_key=cf.BINDING_KEY_NOTIFY
 )
 
 def callback(ch, method, properties, body):
