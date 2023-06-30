@@ -23,11 +23,19 @@ def order():
             'quantity': request.form['quantity']
         }
 
+
+
+
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=cf.RMQ_HOST, 
                                                                     port=cf.RMQ_PORT, 
                                                                     credentials=pika.PlainCredentials(cf.RMQ_USER, cf.RMQ_PASSWORD)))
         channel = connection.channel()
 
+        channel.exchange_declare(
+            exchange=cf.EXCHANGE_NAME, 
+            exchange_type=cf.EXCHANGE_TYPE
+        )
+        
         publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_NOTIFY, json.dumps({'user_email': order['user_email']}))
 
         publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_REPORT, json.dumps(order))

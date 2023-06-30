@@ -25,16 +25,11 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host=cf.RMQ_HOST,
                                                                credentials=pika.PlainCredentials(cf.RMQ_USER, cf.RMQ_PASSWORD)))
 channel = connection.channel()
 
-channel.queue_declare(cf.ORDERS_QUEUE_REPORT)
-
-channel.exchange_declare(
-    exchange=cf.EXCHANGE_NAME, 
-    exchange_type=cf.EXCHANGE_TYPE
-)
+queue = channel.queue_declare(cf.ORDERS_QUEUE_REPORT)
 
 channel.queue_bind(
     exchange=cf.EXCHANGE_NAME,
-    queue=cf.ORDERS_QUEUE_REPORT,
+    queue=queue.method.queue,
     routing_key=cf.BINDING_KEY_REPORT
 )
 
