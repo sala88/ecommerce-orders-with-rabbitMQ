@@ -10,7 +10,25 @@ def about():
 
 def publish_message(channel, exchange, routing_key, body):
     channel.basic_publish(exchange=exchange, routing_key=routing_key, body=body)
-    print(' [x] Sent notify message')
+    print('Sent message')
+
+
+def producer(order):
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=cf.RMQ_HOST, 
+                                                                   port=cf.RMQ_PORT, 
+                                                                   credentials=pika.PlainCredentials(cf.RMQ_USER, cf.RMQ_PASSWORD)))
+    channel = connection.channel()
+
+    channel.exchange_declare(
+        exchange=cf.EXCHANGE_NAME, 
+        exchange_type=cf.EXCHANGE_TYPE
+    )
+    
+    publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_NOTIFY, json.dumps({'user_email': order['user_email']}))
+
+    publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_REPORT, json.dumps(order))
+
+    connection.close()
 
 @app.route('/order/', methods = ['GET', 'POST'])
 def order():
@@ -23,32 +41,9 @@ def order():
             'quantity': request.form['quantity']
         }
 
-
-
-
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host=cf.RMQ_HOST, 
-                                                                    port=cf.RMQ_PORT, 
-                                                                    credentials=pika.PlainCredentials(cf.RMQ_USER, cf.RMQ_PASSWORD)))
-        channel = connection.channel()
-
-        channel.exchange_declare(
-            exchange=cf.EXCHANGE_NAME, 
-            exchange_type=cf.EXCHANGE_TYPE
-        )
-        
-        publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_NOTIFY, json.dumps({'user_email': order['user_email']}))
-
-        publish_message(channel, cf.EXCHANGE_NAME, cf.BINDING_KEY_REPORT, json.dumps(order))
-
-        connection.close()
+        producer(order)
 
     return render_template('order.html')
 
-
-
-
 if __name__ == '__main__':
     app.run(debug=cf.DEBUG, host=cf.HOST, port=cf.PORT)
-
-
-
