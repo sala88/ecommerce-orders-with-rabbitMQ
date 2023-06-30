@@ -12,6 +12,7 @@ def generate_report(payload):
     create_folder("report")
     pdf = FPDF()
     pdf.add_page()
+    pdf.set_font('Arial', '', 14)  
     pdf.multi_cell(0, 10, f"ID: " + payload.get('id'))
     pdf.multi_cell(0, 10, f"User Email: " + payload.get('user_email'))
     pdf.multi_cell(0, 10, f"Product: " + payload.get('product'))

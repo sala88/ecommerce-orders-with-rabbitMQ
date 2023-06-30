@@ -21,8 +21,8 @@ channel.queue_bind(
 
 def callback(ch, method, properties, body):
     payload = json.loads(body)
-    print('Esegui la notifica all’utente: {}'.format(payload['user_email']))
-    print('Notifica eseguita')
+    print('Notify the user: {}'.format(payload['user_email']))
+    print('Notification done')
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 channel.basic_consume(
@@ -30,5 +30,5 @@ channel.basic_consume(
     on_message_callback=callback
 )
 
-print('In attesa di messaggi di nofica..')
+print('Waiting for notification messages..')
 channel.start_consuming()
