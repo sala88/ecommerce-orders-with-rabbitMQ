@@ -10,13 +10,13 @@
         <br>       
         <div class="card">
             <div class="card-body">
-                <h1>{% block title %} Make new order {% endblock %}</h1>
+                <h1>{% block title %} New order {% endblock %}</h1>
                 <form method="post">
-                    <label for="user_mail" class="form-label">User email</label>
+                    <label for="user_email" class="form-label">User email</label>
                     <br>
-                    <input class="form-control" type="text" name="user_mail"
+                    <input class="form-control" type="text" name="user_email"
                         placeholder="user email"
-                        value="{{ request.form['user_mail'] }}" />
+                        value="{{ request.form['user_email'] }}" />
                     <br>
                     <label for="product" class="form-label">Product</label>
                     <br>

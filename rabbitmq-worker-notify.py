@@ -1,6 +1,5 @@
 import config as cf
-import pika
-import json
+import pika, json
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=cf.RMQ_HOST, 
                                                                port=cf.RMQ_PORT, 
@@ -22,8 +21,8 @@ channel.queue_bind(
 
 def callback(ch, method, properties, body):
     payload = json.loads(body)
-    print(' [x] Notifying {}'.format(payload['user_email']))
-    print(' [x] Done')
+    print('Esegui la notifica all’utente: {}'.format(payload['user_email']))
+    print('Notifica eseguita')
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 channel.basic_consume(
@@ -31,5 +30,5 @@ channel.basic_consume(
     on_message_callback=callback
 )
 
-print(' [*] Waiting for notify messages. To exit press CTRL+C')
+print('In attesa di messaggi di nofica..')
 channel.start_consuming()
